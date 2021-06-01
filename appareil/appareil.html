@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+		integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+	<title>Domotique</title>
+</head>
+
+<body>
+	<div class="container" id="app">
+		<div class="row">
+			<div class="col-xs-6">
+
+				<h2>Les Appareils</h2>
+				<ul class="list-group" v-for="(device, index) in tableau">
+					<li class="list-group-item" v-bind:class="[ device.class ]">
+						<h4> {{device.name}} -- {{ device.status }}</h4>
+						<button class="btn btn-success" @click="on(index)"> ON</button>
+						<button class="ml-2 btn btn-danger" @click="off(index)"> OFF</button>
+					</li>
+
+				</ul>
+				<br>
+				<button class="btn btn-success" @click="allOn()">ALL ON</button>
+
+				<button class="ml-2 btn btn-danger" @click="allOff()">ALL OFF</button>
+			</div>
+			<div class="ml-5 col-xs-6">
+				<input v-model="device" type="text" class="form-control mt-5" id="" placeholder="nouvel appareil">
+				<button class="btn btn-primary mt-2" @click="addDevice()">Ajouter</button>
+			</div>
+		</div>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<script>
+		const app = new Vue(
+			{
+				el: "#app",
+				data: {
+					tableau: [
+						// JSON.parse(localStorage.stuff),
+						{ name: 'TV', status: 'allumé', class: "list-group-item-success" },
+						{ name: 'Xbox', status: 'éteint', class: "list-group-item-danger" },
+						{ name: 'PlayStation', status: 'allumé', class: "list-group-item-success" },
+					],
+					device: ''
+				},
+				methods:
+				{
+					allOn() {
+						for (let i = 0; i < this.tableau.length; i++) {
+							this.tableau[i].status = "allumé";
+							this.tableau[i].class = "list-group-item-success";
+						}
+					},
+					allOff() {
+						for (let i = 0; i < this.tableau.length; i++) {
+							this.tableau[i].status = "éteint";
+							this.tableau[i].class = "list-group-item-danger";
+						}
+					},
+					on(i) {
+						this.tableau[i].status = 'allumé';
+						this.tableau[i].class = 'list-group-item-success';
+						console.log(localStorage);
+					},
+					off(i) {
+						this.tableau[i].status = 'éteint';
+						this.tableau[i].class = 'list-group-item-danger';
+					},
+					addDevice() {
+						let newDevice = {
+							name: this.device,
+							status: 'éteint',
+							class: 'list-group-item-danger'
+						}
+						this.device = '';
+						this.tableau.push(newDevice);
+						// localStorage.setItem('stuff', JSON.stringify(this.tableau));
+					}
+				}
+			}
+		)
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+.boxshadow {
+    color: #f4d7f7;
+    box-shadow: 
+        0 0 8px #fff,
+        inset 0 0 8px #fff,
+        0 0 32px #ff00f1,
+        inset 0 0 32px #ff00f1,
+        0 0 64px #ff00f1,
+        inset 0 0 64px #ff00f1;
+}
+
+.neon-text {
+    text-shadow: 
+    0 0 6px #ffd6d6,
+    0 0 6px #ffd6d6,
+    0 0 16px #1ae9f5,
+    0 0 32px #1ae9f5,
+    0 0 64px #1ae9f5,
+    0 0 90px #1ae9f5;
+    padding: 50px;
+    font-size: 50px;
+}
