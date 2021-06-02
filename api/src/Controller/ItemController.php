@@ -56,8 +56,12 @@ class ItemController extends AbstractController
         $i = json_decode($request->getContent());
 
         $item->setName($i->name);
+        $item->setBuy($i->buy);
 
         $em->persist($item);
         $em->flush();
+
+        $tab["message"] = "updater";
+        return $this->json($tab);
     }
 }

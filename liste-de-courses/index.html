@@ -38,7 +38,7 @@
 					<tbody id="tab1">
 						
 						<tr  v-for="(line, index) in table" v-bind:class="line.danger">
-							<td v-if="line.buy">
+							<td v-if="line.buy == 1">
 								<strike>{{line.name}}</strike>
 							</td>
 							<td v-else>
@@ -80,7 +80,6 @@
 				data: {
 					table: [],
 					item: "",
-					danger: "",
 					loading: 0
 				},
 				computed: {
@@ -102,21 +101,45 @@
 						this.table.splice(i, 1);
 					},
 					buyItem(i) {
-						if (this.table[i].buy) {
-							this.table[i].buy = false;
+						let buyItem = {};
+						if (this.table[i].buy == 1) {
+							buyItem.name = this.table[i].name;
+							buyItem.buy = 0;
+							this.table[i].buy = 0;
 							this.table[i].danger = "";
+							
+						
 						} else {
-							this.table[i].buy = true;
+							buyItem.name = this.table[i].name;
+							buyItem.buy = 1
+							this.table[i].buy = 1;
 							this.table[i].danger = "table-danger";
+							
 						}
+						console.log(buyItem)
+						axios
+							.put("http://localhost/demo-vuejs/api/public/items/"+this.table[i].id, buyItem)
+							.then(response => console.log(response))
 					},
 				},
 				mounted() {
+					
 					axios
 						.get("http://localhost/demo-vuejs/api/public/items/")
-						.then(response => { this.table = response.data,
-							this.loading = 1
-						})
+						.then(response => { this.table = response.data;
+							this.loading = 1;
+							for(let i = 0; i< this.table.length; i++) {
+								if(this.table[i].buy) {
+									this.table[i].danger = "table-danger";
+								}
+								else {
+									this.table[i].danger = "";
+								}
+							}
+							
+		
+						}
+					)
 				}
 			}
 		)
