@@ -27,13 +27,17 @@
 					</div>
 				</div>
 				<br>
-				<table class="table table-striped">
+				<div v-if="loading === 0" class="spinner-border" role="status">
+					<span class="sr-only">Loading...</span>
+				</div>
+				<table  v-else class="table table-striped">
 					<thead>
 						<th>Item</th>
 						<th>Action</th>
 					</thead>
 					<tbody id="tab1">
-						<tr v-for="(line, index) in table" v-bind:class="line.danger">
+						
+						<tr  v-for="(line, index) in table" v-bind:class="line.danger">
 							<td v-if="line.buy">
 								<strike>{{line.name}}</strike>
 							</td>
@@ -50,6 +54,7 @@
 								</button>
 							</td>
 						</tr>
+						
 
 
 					</tbody>
@@ -59,7 +64,12 @@
 		</div>
 	</div>
 
-
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+		crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
 	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
@@ -71,6 +81,7 @@
 					table: [],
 					item: "",
 					danger: "",
+					loading: 0
 				},
 				computed: {
 
@@ -82,13 +93,13 @@
 						}
 						this.item = "";
 						axios
-						.post("http://localhost/demo-vuejs/api/public/items/", newItem)
+							.post("http://localhost/demo-vuejs/api/public/items/", newItem)
 						this.table.push(newItem);
 					},
 					removeItem(i) {
 						axios
-						.delete("http://localhost/demo-vuejs/api/public/items/"+this.table[i].id)
-						this.table.splice(i,1);
+							.delete("http://localhost/demo-vuejs/api/public/items/" + this.table[i].id)
+						this.table.splice(i, 1);
 					},
 					buyItem(i) {
 						if (this.table[i].buy) {
@@ -102,8 +113,10 @@
 				},
 				mounted() {
 					axios
-					.get("http://localhost/demo-vuejs/api/public/items/")
-					.then(response => this.table = response.data)
+						.get("http://localhost/demo-vuejs/api/public/items/")
+						.then(response => { this.table = response.data,
+							this.loading = 1
+						})
 				}
 			}
 		)
