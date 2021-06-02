@@ -35,7 +35,7 @@ class ItemController extends AbstractController
        $em->persist($newItem);
        $em->flush();
 
-       $tab["message"] = "Hello Ajouter ! " . $item->name;
+       $tab["message"] = $newItem->getId();
        return $this->json($tab);
     }
     /**

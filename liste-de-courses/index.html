@@ -93,7 +93,9 @@
 						this.item = "";
 						axios
 							.post("http://localhost/demo-vuejs/api/public/items/", newItem)
-						this.table.push(newItem);
+							.then(response => newItem.id = response.data.message)							
+							this.table.push(newItem)
+						
 					},
 					removeItem(i) {
 						axios
@@ -102,7 +104,7 @@
 					},
 					buyItem(i) {
 						let buyItem = {};
-						if (this.table[i].buy == 1) {
+						if (this.table[i].buy) {
 							buyItem.name = this.table[i].name;
 							buyItem.buy = 0;
 							this.table[i].buy = 0;
@@ -116,10 +118,8 @@
 							this.table[i].danger = "table-danger";
 							
 						}
-						console.log(buyItem)
 						axios
 							.put("http://localhost/demo-vuejs/api/public/items/"+this.table[i].id, buyItem)
-							.then(response => console.log(response))
 					},
 				},
 				mounted() {
