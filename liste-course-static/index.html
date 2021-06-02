@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Courses</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="icon" href="../img/favicon.ico" />
+</head>
+
+<body>
+	<a href="../index.html">retour</a>
+	<!-- container container-fluid  -->
+	<div class="container" id="app">
+		<div class="row">
+			<div class="offset-3 col-6">
+				<h1> Liste de courses</h1>
+				<br>
+				<div class="row">
+					<div class="col-6">
+						<input v-model="item" class="form-control">
+					</div>
+					<div class="col-2">
+						<button id="btn1" class="btn btn-success"  @click="addItem()">
+							<i class="fa fa-plus"></i>
+						</button>
+					</div>
+				</div>
+				<br>
+				<table class="table table-striped">
+					<thead>
+						<th>Item</th>
+						<th>Action</th>
+					</thead>
+					<tbody id="tab1">
+						<tr v-for="(line, index) in table"  v-bind:class="danger">
+							<td v-if="line.buy">
+								<strike>{{line.name}}</strike>
+							</td>
+							<td v-else>
+								{{line.name}}
+							</td>
+							<td>
+								<button class="btn btn-primary acheter" @click="buyItem(index)">
+									<i class="fa fa-check"></i>
+								</button>
+								<!--&nbsp;-->
+								<button class="btn btn-danger del" @click="removeItem(index)">
+									<i class="fa fa-trash"></i>
+								</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<script>
+		const app = new Vue(
+			{
+				el: "#app",
+				data: {
+					table: [],
+					item: "",
+					danger: "",
+				},
+				computed: {
+				},
+				methods:{
+					addItem() {
+						let newItem = {
+							name: this.item,
+							buy: false
+						}
+						this.table.push(newItem);
+						this.item = "";
+					},
+					removeItem(i) {
+						this.table.splice(i,1)
+					},
+					buyItem(i) {
+						if(this.table[i].buy) {
+							this.table[i].buy = false;
+							this.danger = "";
+						}else {
+							this.table[i].buy = true;
+							this.danger = "table-danger";
+						}
+					}
+				}
+			}
+		)
+	</script>
+</body>
+</html>
