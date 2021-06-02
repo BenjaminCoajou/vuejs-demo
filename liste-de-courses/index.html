@@ -21,7 +21,7 @@
 						<input v-model="item" class="form-control">
 					</div>
 					<div class="col-2">
-						<button id="btn1" class="btn btn-success"  @click="addItem()">
+						<button id="btn1" class="btn btn-success" @click="addItem()">
 							<i class="fa fa-plus"></i>
 						</button>
 					</div>
@@ -33,7 +33,7 @@
 						<th>Action</th>
 					</thead>
 					<tbody id="tab1">
-						<tr v-for="(line, index) in table"  v-bind:class="danger">
+						<tr v-for="(line, index) in table" v-bind:class="line.danger">
 							<td v-if="line.buy">
 								<strike>{{line.name}}</strike>
 							</td>
@@ -61,6 +61,8 @@
 
 
 	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 	<script>
 		const app = new Vue(
 			{
@@ -73,27 +75,35 @@
 				computed: {
 
 				},
-				methods:{
+				methods: {
 					addItem() {
 						let newItem = {
 							name: this.item,
-							buy: false
 						}
-						this.table.push(newItem);
 						this.item = "";
+						axios
+						.post("http://localhost/demo-vuejs/api/public/items/", newItem)
+						this.table.push(newItem);
 					},
 					removeItem(i) {
-						this.table.splice(i,1)
+						axios
+						.delete("http://localhost/demo-vuejs/api/public/items/"+this.table[i].id)
+						this.table.splice(i,1);
 					},
 					buyItem(i) {
-						if(this.table[i].buy) {
+						if (this.table[i].buy) {
 							this.table[i].buy = false;
-							this.danger = "";
-						}else {
+							this.table[i].danger = "";
+						} else {
 							this.table[i].buy = true;
-							this.danger = "table-danger";
+							this.table[i].danger = "table-danger";
 						}
-					}
+					},
+				},
+				mounted() {
+					axios
+					.get("http://localhost/demo-vuejs/api/public/items/")
+					.then(response => this.table = response.data)
 				}
 			}
 		)
