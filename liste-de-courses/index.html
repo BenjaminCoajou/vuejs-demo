@@ -37,7 +37,7 @@
 					</thead>
 					<tbody id="tab1">
 						
-						<tr  v-for="(line, index) in table" v-bind:class="line.danger">
+						<tr  v-for="(line, index) in table" v-bind:class="bgItem(line.buy)">
 							<td v-if="line.buy == 1">
 								<strike>{{line.name}}</strike>
 							</td>
@@ -89,6 +89,7 @@
 					addItem() {
 						let newItem = {
 							name: this.item,
+							buy: 0
 						}
 						this.item = "";
 						axios
@@ -121,6 +122,12 @@
 						axios
 							.put("http://localhost/demo-vuejs/api/public/items/"+this.table[i].id, buyItem)
 					},
+					bgItem(bool) {
+						if(bool == 1) {
+							return "table-danger";
+						}
+						else { return "";}
+					}
 				},
 				mounted() {
 					
